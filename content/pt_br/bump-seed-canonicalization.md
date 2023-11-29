@@ -146,7 +146,7 @@ pub struct Data {
 }
 ```
 
-Se você não está inicializando uma conta, ainda poderá validar PDAs com as restrições `seeds` e `bump`. Isso simplesmente rederiva o PDA e compara o endereço derivado com o endereço da conta que foi passada.
+Se você não está inicializando uma conta, ainda poderá validar PDAs com as restrições `seeds` e `bump`. Isso simplesmente rederiva o PDA e compara o endereço derivado com o endereço da conta que foi passado.
 
 Nesse cenário, o Anchor permite *sim* que você especifique o bump a ser usado para derivar o PDA com `bump = <some_bump>`. A intenção aqui não é usar bumps arbitrários, mas sim permitir que você otimize seu programa. A natureza iterativa do `find_program_address` torna-o dispendioso, portanto, a prática recomendada é armazenar o bump canônico nos dados da conta do PDA ao inicializar um PDA, permitindo que você faça referência ao bump armazenado ao validar o PDA nas instruções subsequentes.
 
@@ -163,7 +163,7 @@ pub mod bump_seed_canonicalization_recommended {
 
     pub fn set_value(ctx: Context<BumpSeed>, _key: u64, new_value: u64) -> Result<()> {
         ctx.accounts.data.value = new_value;
-        // store the bump on the account
+        // armazena o bump na conta
         ctx.accounts.data.bump = *ctx.bumps.get("data").unwrap();
         Ok(())
     }
@@ -217,7 +217,7 @@ Por outro lado, se você precisar apenas verificar o endereço de um PDA passado
 
 # Demonstração
 
-Para demonstrar os golpes de segurança possíveis quando você não verifica o bump canônico, vamos trabalhar com um programa que permite que cada usuário do programa "requeira" recompensas na hora certa.
+Para demonstrar as explorações de segurança possíveis quando você não verifica o bump canônico, vamos trabalhar com um programa que permite que cada usuário do programa "solicite" recompensas na hora certa.
 
 ### 1. Configure
 
@@ -324,7 +324,7 @@ pub struct UserSecure {
 }
 ```
 
-Em seguida, vamos criar structs de validação de conta para cada uma das novas instruções. Eles serão muito semelhantes às versões inseguras, mas permitirão que o Anchor manipule a derivação e a desserialização dos PDAs.
+Em seguida, vamos criar structs de validação de conta para cada uma das novas instruções. Elas serão muito semelhantes às versões inseguras, mas permitirão que o Anchor manipule a derivação e a desserialização dos PDAs.
 
 ```rust
 #[derive(Accounts)]
@@ -501,4 +501,4 @@ Assim como nas outras lições deste módulo, sua oportunidade de praticar como 
 
 Reserve algum tempo para analisar pelo menos um programa e garantir que todas as derivações e verificações do PDA estejam usando o bump canônico.
 
-Lembre-se: se você encontrar um bug ou um golpe no programa de outra pessoa, alerte-a! Se encontrar um bug em seu próprio programa, não deixe de corrigi-lo imediatamente.
+Lembre-se: se você encontrar um bug ou uma exploração no programa de outra pessoa, alerte-a! Se encontrar um bug em seu próprio programa, não deixe de corrigi-lo imediatamente.
