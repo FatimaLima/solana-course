@@ -12,7 +12,7 @@ Objectives:
 - **NFTs Compactados (cNFTs)** usam **Compactação de estado** para fazer hash de dados de NFTs e armazenar o hash na cadeia numa conta usando uma estrutura **árvore de Merkle concorrente** 
 - O hash de dados do cNFT não pode ser usado para inferir os dados do cNFT, mas pode ser usado para **verificar** se os dados do cNFT que você está vendo estão corretos
 - Os provedores RPC de suporte **indexam** os dados do cNFT off-chain quando o cNFT é cunhado para que você possa usar a **API de Leitura** para acessar os dados
-- O programa **Metaplex Bubblegum** é uma abstração do programa **State Compression** que permite criar, cunhar e gerenciar coleções de cNFT de forma mais simples.
+- O programa **Metaplex Bubblegum** é uma abstração do programa **Compactação de Estado** que permite criar, cunhar e gerenciar coleções de cNFT de forma mais simples.
 
 # Visão Geral
 
@@ -40,7 +40,7 @@ Para armazenar hashes e permitir a verificação, usamos uma estrutura de árvor
 
 Um problema não abordado no item acima é como disponibilizar os dados se eles não puderem ser obtidos de uma conta. Como esse processo de hashing ocorre na cadeia, todos os dados existem no estado do livro-razão e, teoricamente, poderiam ser recuperados da transação original reproduzindo todo o estado da cadeia desde a origem. No entanto, é muito mais simples (embora ainda complicado) fazer com que um **indexador** rastreie e indexe esses dados à medida que as transações ocorrem. Isso garante que haja um "cache" dos dados off-chain que qualquer pessoa possa acessar e, posteriormente, verificar em relação ao hash raiz on-chain.
 
-Esse processo é *muito complexo*. Abordaremos alguns dos principais conceitos abaixo, mas não se preocupe se você não entender imediatamente. Falaremos mais sobre teoria na lição sobre Compactação de estado e nos concentraremos principalmente na aplicação a NFTs nesta lição. Você poderá trabalhar com cNFTs ao final desta lição, mesmo que não compreenda totalmente todas as peças do quebra-cabeça da Compactação de estado.
+Esse processo é *muito complexo*. Abordaremos alguns dos principais conceitos abaixo, mas não se preocupe se você não entender imediatamente. Falaremos mais sobre teoria na lição sobre compactação de estado e nos concentraremos principalmente na aplicação a NFTs nesta lição. Você poderá trabalhar com cNFTs ao final desta lição, mesmo que não compreenda totalmente todas as peças do quebra-cabeça da compactação de estado.
 
 ### Árvores de Merkle Concorrentes
 
@@ -266,7 +266,7 @@ A lista abaixo mostra a entrada necessária para essa função auxiliar:
     - `payer` - O endereço que paga as taxas de transação, aluguel etc.
     - `treeCreator` - O endereço a ser listado como o criador da árvore
     - `logWrapper` - O programa a ser usado para expor os dados aos indexadores por meio de logs; esse deve ser o endereço do programa Noop do SPL, a menos que você tenha alguma outra implementação personalizada
-    - `compressionProgram` - O programa de Compactação a ser usado para inicializar a árvore de Merkle; deve ser o endereço do programa Compactação de Estado do SPL, a menos que você tenha outra implementação personalizada
+    - `compressionProgram` - O programa de compactação a ser usado para inicializar a árvore de Merkle; deve ser o endereço do programa Compactação de Estado do SPL, a menos que você tenha outra implementação personalizada
 - `args` - Um objeto que representa argumentos adicionais exigidos pela instrução. Isso inclui:
     - `maxBufferSize` - O tamanho máximo do buffer da árvore de Merkle
     - `maxDepth` - A profundidade máxima da árvore de Merkle
